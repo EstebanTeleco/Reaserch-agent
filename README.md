@@ -2,7 +2,7 @@
 
 Un agente de investigación armado desde cero, sin LangChain ni nada por el
 estilo — solo la Gemini API directa (gratis con Gemini 3.6 Flash). Le haces una pregunta y el
-agente decide solo si necesita buscar algo en internet, hacer una cuenta,
+agente decide solo si necesita buscar algo en internet, resolver un cálculo,
 o si ya tiene suficiente para contestar.
 
 ## Por qué sin framework
