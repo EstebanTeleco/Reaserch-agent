@@ -1,7 +1,7 @@
 # Research Agent
 
 Un agente de investigación armado desde cero, sin LangChain ni nada por el
-estilo — solo la Gemini API directa (gratis con Gemini 2.5 Flash). Le hacés una pregunta y el
+estilo — solo la Gemini API directa (gratis con Gemini 3.6 Flash). Le haces una pregunta y el
 agente decide solo si necesita buscar algo en internet, hacer una cuenta,
 o si ya tiene suficiente para contestar.
 
@@ -38,13 +38,13 @@ para que no se quede pensando para siempre.
 pip install -r requirements.txt
 ```
 
-Copiá el `.env.example` a `.env` y completá tus keys:
+Copia el `.env.example` a `.env` y completa tus keys:
 
 ```bash
 cp .env.example .env
 ```
 
-- `GEMINI_API_KEY`: la sacás gratis en [Google AI Studio](https://aistudio.google.com/apikey) — `gemini-2.5-flash` tiene capa gratuita generosa, no hace falta poner tarjeta
+- `GEMINI_API_KEY`: la sacas gratis en [Google AI Studio](https://aistudio.google.com/apikey) — `gemini-3.6-flash` tiene capa gratuita generosa, no hace falta poner tarjeta
 - `TAVILY_API_KEY`: tiene un plan gratis en [tavily.com](https://tavily.com), alcanza de sobra para probar esto
 
 Y para correrlo:
@@ -56,21 +56,21 @@ python agent.py
 ## Un ejemplo real
 
 ```
-Hacé tu pregunta: decime el precio del dólar blue hoy y cuánto son 300 dólares en pesos
+Haz tu pregunta: dime el tipo de cambio del dólar a soles hoy en Perú y cuánto son 300 dólares en soles
 
 --- Iteración 1 ---
-pensando: necesito buscar el precio actual del dólar blue
-tool: web_search({'query': 'precio dolar blue hoy'})
-resultado: [Fuente 1] Cotización dólar blue hoy...
+pensando: necesito buscar el tipo de cambio actual del dólar en Perú
+tool: web_search({'query': 'tipo de cambio dolar soles hoy peru'})
+resultado: [Fuente 1] Tipo de cambio dólar Perú hoy...
 
 --- Iteración 2 ---
 pensando: ahora calculo la conversión
-tool: calculator({'expression': '300 * 1450'})
-resultado: Resultado: 435000
+tool: calculator({'expression': '300 * 3.75'})
+resultado: Resultado: 1125.0
 
 --- Iteración 3 ---
-respuesta final: El dólar blue hoy cotiza a $1450 (Fuente 1).
-300 USD equivalen a $435.000 ARS.
+respuesta final: El tipo de cambio hoy está en S/ 3.75 por dólar (Fuente 1).
+300 USD equivalen a S/ 1,125.00.
 ```
 
 ## Un par de decisiones que tomé
@@ -88,6 +88,19 @@ respuesta final: El dólar blue hoy cotiza a $1450 (Fuente 1).
 - **Una tool, un archivo.** Así agregar una tool nueva es literalmente
   crear un archivo en `tools/` y sumarla a los dos diccionarios en
   `agent.py`, sin tocar el resto de la lógica.
+
+## Problemas comunes
+
+**Error de certificado SSL al llamar a la API (Windows + conda):** si ves un
+error tipo `FileNotFoundError` relacionado a `SSL_CERT_FILE` al correr el
+agente, es porque conda dejó esa variable de entorno apuntando a un archivo
+que no existe. Se soluciona corriendo `unset SSL_CERT_FILE` antes de correr
+el script (en Git Bash) o `set SSL_CERT_FILE=` en CMD.
+
+**Error 404 con el modelo de Gemini:** Google va actualizando y discontinuando
+modelos con el tiempo. Si `gemini-3.6-flash` deja de estar disponible en algún
+momento, revisa los modelos vigentes en [Google AI Studio](https://aistudio.google.com)
+y actualiza la constante `MODEL_NAME` en `agent.py`.
 
 ## Cosas que le faltan (y me gustaría sumar)
 
