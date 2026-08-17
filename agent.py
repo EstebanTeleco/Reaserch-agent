@@ -18,18 +18,19 @@ respuesta (Gemini devuelve "function_call" parts en vez de bloques
 "tool_use").
 """
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
 from google import genai
 from google.genai import types
-from dotenv import load_dotenv
 
 from tools.web_search import web_search, WEB_SEARCH_TOOL_DEFINITION
 from tools.calculator import calculator, CALCULATOR_TOOL_DEFINITION
 
-load_dotenv()
-
 client = genai.Client(api_key=os.environ.get("GEMINI_API_KEY"))
 
-MODEL_NAME = "gemini-2.5-flash"
+MODEL_NAME = "gemini-3.6-flash"
 
 # Estas son las tools que Gemini "ve" y puede pedir usar. Gemini las quiere
 # envueltas en un types.Tool con una lista de function_declarations.
@@ -169,6 +170,6 @@ def run_agent(user_question: str, verbose: bool = True) -> str:
 
 if __name__ == "__main__":
     # python agent.py y listo, prueba rápida por consola
-    pregunta = input("Hacé tu pregunta: ")
+    pregunta = input("Haz tu pregunta: ")
     respuesta = run_agent(pregunta)
     print(f"\n{'='*50}\nRESPUESTA FINAL:\n{respuesta}")
